@@ -287,11 +287,13 @@
                     </div>
                     <div>
                         <span class="text-xs font-english tracking-widest text-morandi-sage uppercase">VENUE LOCATION</span>
-                        <h3 class="text-xl font-medium text-morandi-dark mt-1">
-                            <span class="no-wrap">尖沙咀北京道八號 朗廷酒店 CHALET 宴會廳</span>
+                        <h3 class="text-xl font-medium text-morandi-dark mt-1 leading-snug">
+                            <span class="no-wrap block">尖沙咀北京道八號</span>
+                            <span class="no-wrap block">朗廷酒店 CHALET 宴會廳</span>
                         </h3>
                         <p class="text-xs text-morandi-slate mt-1 leading-relaxed">
-                            <span class="no-wrap">The Langham, Hong Kong, 8 Peking Road, Tsim Sha Tsui</span>
+                            <span class="no-wrap block sm:inline">The Langham, Hong Kong,</span>
+                            <span class="no-wrap block sm:inline">8 Peking Road, Tsim Sha Tsui</span>
                         </p>
                     </div>
                 </div>
@@ -400,17 +402,20 @@
                 <div class="w-12 h-px bg-morandi-gold/60 mx-auto mt-4"></div>
             </div>
 
-            <!-- Hidden Iframe Target for Form Submission -->
+            <!-- Hidden Iframe Target for Form Submission Fallback -->
             <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(window.submitted && typeof window.showThankYouModal === 'function') { window.showThankYouModal(); }"></iframe>
 
-            <!-- Google Form Submission -->
+            <!-- Google Form Submission with Asynchronous JS -->
             <form action="https://docs.google.com/forms/d/e/1FAIpQLScFUBIa4_LtAJ7BiUDMHl_UNrqRbGy55CoOkzXD4anrWZjVrw/formResponse" 
                   method="POST" 
-                  target="hidden_iframe" 
                   id="rsvpForm" 
-                  onsubmit="window.submitted=true;"
+                  onsubmit="handleFormSubmit(event)"
                   class="bg-white p-8 md:p-10 rounded-2xl shadow-xl shadow-morandi-gold/10 border border-morandi-gold/20 space-y-6">
                 
+                <!-- Hidden fields required by Google Form -->
+                <input type="hidden" name="entry.2093466386" value="">
+                <input type="hidden" name="entry.845217517" value="">
+
                 <!-- Field 1: Name -->
                 <div>
                     <label class="block text-sm font-medium text-morandi-dark mb-2">
@@ -671,8 +676,55 @@
             window.submitted = false;
         }
 
+        // Asynchronous Direct Submission via Fetch API (Bypasses Preview Iframe Restrictions)
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            // Show Loading UI
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i><span>傳送中 SENDING...</span>';
+            }
+
+            const formData = new FormData(form);
+            const searchParams = new URLSearchParams();
+
+            for (const [key, value] of formData.entries()) {
+                searchParams.append(key, value);
+            }
+
+            try {
+                // Post directly to Google Forms via no-cors mode
+                await fetch('https://docs.google.com/forms/d/e/1FAIpQLScFUBIa4_LtAJ7BiUDMHl_UNrqRbGy55CoOkzXD4anrWZjVrw/formResponse', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: searchParams.toString()
+                });
+                
+                // Show Success Modal immediately
+                showThankYouModal();
+            } catch (error) {
+                console.error('Submission error:', error);
+                // Fallback to standard iframe submission
+                window.submitted = true;
+                form.target = 'hidden_iframe';
+                form.submit();
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-regular fa-paper-plane mr-2"></i><span>送出出席回函 SUBMIT</span>';
+                }
+            }
+        }
+
         window.showThankYouModal = showThankYouModal;
         window.closeThankYouModal = closeThankYouModal;
+        window.handleFormSubmit = handleFormSubmit;
     </script>
 </body>
 </html>
