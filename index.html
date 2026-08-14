@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
+        // Early global state initialization to prevent iframe onload ReferenceErrors
         window.submitted = false;
 
         tailwind.config = {
@@ -56,7 +57,7 @@
 
         /* Glassmorphism Frosted Nav */
         .glass-nav {
-            background: rgba(253, 251, 247, 0.75);
+            background: rgba(253, 251, 247, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(212, 163, 115, 0.15);
@@ -71,7 +72,7 @@
             backdrop-filter: blur(8px);
         }
 
-        /* Prevent unwanted text wrapping on mobile devices */
+        /* Prevent text wrapping on mobile devices */
         .no-wrap {
             white-space: nowrap !important;
         }
@@ -84,15 +85,6 @@
         }
         .accordion-content.active {
             max-height: 500px;
-        }
-
-        /* Floating background audio button animation */
-        @keyframes pulse-slow {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.05); opacity: 1; }
-        }
-        .pulse-btn {
-            animation: pulse-slow 3s infinite ease-in-out;
         }
     </style>
 </head>
@@ -183,7 +175,6 @@
                         </span>
                         <span class="text-xs tracking-widest text-morandi-sage mt-2 font-medium">DAYS / 天</span>
                     </div>
-                    <!-- Subtle Divider Line for Desktop -->
                     <div class="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2 w-px h-12 bg-morandi-gold/30"></div>
                 </div>
 
@@ -195,7 +186,6 @@
                         </span>
                         <span class="text-xs tracking-widest text-morandi-sage mt-2 font-medium">HOURS / 時</span>
                     </div>
-                    <!-- Subtle Divider Line for Desktop -->
                     <div class="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2 w-px h-12 bg-morandi-gold/30"></div>
                 </div>
 
@@ -207,7 +197,6 @@
                         </span>
                         <span class="text-xs tracking-widest text-morandi-sage mt-2 font-medium">MINS / 分</span>
                     </div>
-                    <!-- Subtle Divider Line for Desktop -->
                     <div class="hidden md:block absolute top-1/2 -right-3 transform -translate-y-1/2 w-px h-12 bg-morandi-gold/30"></div>
                 </div>
 
@@ -299,10 +288,10 @@
                     <div>
                         <span class="text-xs font-english tracking-widest text-morandi-sage uppercase">VENUE LOCATION</span>
                         <h3 class="text-xl font-medium text-morandi-dark mt-1">
-                            <span class="no-wrap">朗廷酒店 CHALET 宴會廳</span>
+                            <span class="no-wrap">尖沙咀北京道八號 朗廷酒店 CHALET 宴會廳</span>
                         </h3>
                         <p class="text-xs text-morandi-slate mt-1 leading-relaxed">
-                            <span class="no-wrap">尖沙咀北京道八號</span>
+                            <span class="no-wrap">The Langham, Hong Kong, 8 Peking Road, Tsim Sha Tsui</span>
                         </p>
                     </div>
                 </div>
@@ -343,7 +332,7 @@
                     <button class="accordion-header w-full px-6 py-5 text-left flex justify-between items-center bg-white hover:bg-morandi-cream/50 transition focus:outline-none">
                         <div class="flex items-center space-x-3">
                             <i class="fa-solid fa-train text-morandi-gold text-lg"></i>
-                            <span class="font-medium text-morandi-dark text-base">香港地鐵資訊 MTR Station</span>
+                            <span class="font-medium text-morandi-dark text-base">香港地鐵交通網絡 MTR Station</span>
                         </div>
                         <i class="fa-solid fa-chevron-down text-morandi-sage transition-transform duration-300"></i>
                     </button>
@@ -383,7 +372,7 @@
                     </button>
                     <div class="accordion-content border-t border-gray-100 bg-morandi-cream/20">
                         <div class="px-6 py-5 text-sm text-morandi-slate leading-relaxed space-y-2">
-                            <p>酒店設有泊車服務，亦可使用鄰近海港城或北京道一號停車場。</p>
+                            <p>朗廷酒店設有泊車服務，亦可使用鄰近海港城或北京道一號停車場。</p>
                             <p>導航設定：<span class="no-wrap font-medium text-morandi-dark">尖沙咀北京道八號 朗廷酒店</span>。</p>
                         </div>
                     </div>
@@ -429,7 +418,7 @@
                         <span class="text-red-400 ml-1">*</span>
                     </label>
                     <input type="text" 
-                           name="entry.2004532227" 
+                           name="entry.1886153940" 
                            required 
                            value="" 
                            placeholder="請輸入您的姓名" 
@@ -443,7 +432,7 @@
                         <span class="text-red-400 ml-1">*</span>
                     </label>
                     <input type="tel" 
-                           name="entry.1166974658" 
+                           name="entry.2029074728" 
                            required 
                            value="" 
                            placeholder="+852 0000-0000" 
@@ -456,36 +445,50 @@
                         實體喜帖郵寄資料 <span class="font-english text-xs text-morandi-sage font-light ml-1">POSTAL ADDRESS</span>
                     </label>
                     <p class="text-xs text-morandi-sage mb-2">請提供您的收件資料，讓我們寄喜帖給您（收件人 / 地址 / 電話）</p>
-                    <textarea name="entry.184319698_address" 
+                    <textarea name="entry.1647990662" 
                               rows="2" 
-                              value="" 
                               placeholder="例如：陳大明 / 香港九龍尖沙咀... / +852 0000-0000" 
                               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-morandi-gold focus:ring-1 focus:ring-morandi-gold outline-none transition text-sm"></textarea>
                 </div>
 
-                <!-- Field 4: Attendance Dropdown -->
+                <!-- Field 4: Relationship with Groom/Bride -->
+                <div>
+                    <label class="block text-sm font-medium text-morandi-dark mb-2">
+                        與新人的關係 <span class="font-english text-xs text-morandi-sage font-light ml-1">RELATIONSHIP</span>
+                    </label>
+                    <select name="entry.2044940604" 
+                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-morandi-gold focus:ring-1 focus:ring-morandi-gold outline-none transition text-sm bg-white">
+                        <option value="新郎親戚" selected>新郎親戚</option>
+                        <option value="新郎朋友">新郎朋友</option>
+                        <option value="新娘親戚">新娘親戚</option>
+                        <option value="新娘朋友">新娘朋友</option>
+                        <option value="共同好友 / 工作夥伴">共同好友 / 工作夥伴</option>
+                    </select>
+                </div>
+
+                <!-- Field 5: Attendance Dropdown -->
                 <div>
                     <label class="block text-sm font-medium text-morandi-dark mb-2">
                         出席意願 <span class="font-english text-xs text-morandi-sage font-light ml-1">ATTENDANCE</span>
                         <span class="text-red-400 ml-1">*</span>
                     </label>
-                    <select name="entry.839337160" 
+                    <select name="entry.1312972387" 
                             id="attendanceSelect" 
                             required 
                             class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-morandi-gold focus:ring-1 focus:ring-morandi-gold outline-none transition text-sm bg-white">
-                        <option value="" disabled selected>請選擇是否出席</option>
-                        <option value="誠摯出席">誠摯出席</option>
-                        <option value="遺憾無法出席">遺憾無法出席，寄送祝福</option>
+                        <option value="" disabled selected>請選擇出席意願</option>
+                        <option value="我要參加！一起見證幸福時刻">誠摯出席 (我要參加！一起見證幸福時刻)</option>
+                        <option value="遺憾無法出席，寄送祝福">遺憾無法出席，寄送祝福</option>
                     </select>
                 </div>
 
-                <!-- Field 5: Guest Count -->
+                <!-- Field 6: Guest Count -->
                 <div>
                     <label class="block text-sm font-medium text-morandi-dark mb-2">
                         參加午宴人數 <span class="font-english text-xs text-morandi-sage font-light ml-1">GUEST COUNT</span>
                     </label>
                     <input type="number" 
-                           name="entry.1065046570" 
+                           name="entry.1567260636" 
                            id="guestCountInput" 
                            min="0" 
                            max="10" 
@@ -497,24 +500,24 @@
                 <!-- CONDITIONAL SECTION: Shows ONLY when Guest Count > 0 -->
                 <div id="conditionalSection" class="hidden space-y-6 pt-4 border-t border-morandi-cream transition-all duration-300">
                     
-                    <!-- Field 6: Vegetarian Meal Requirement -->
+                    <!-- Field 7: Vegetarian Meal Requirement -->
                     <div>
                         <label class="block text-sm font-medium text-morandi-dark mb-2">
                             是否準備素食？ <span class="font-english text-xs text-morandi-sage font-light ml-1">VEGETARIAN MEALS</span>
                         </label>
-                        <select name="entry.184319698" 
+                        <select name="entry.1259066676" 
                                 class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-morandi-gold focus:ring-1 focus:ring-morandi-gold outline-none transition text-sm bg-white">
                             <option value="否">否</option>
                             <option value="是">是</option>
                         </select>
                     </div>
 
-                    <!-- Field 7: Child Seat Requirement -->
+                    <!-- Field 8: Child Seat Requirement -->
                     <div>
                         <label class="block text-sm font-medium text-morandi-dark mb-2">
                             是否需要兒童座椅？ <span class="font-english text-xs text-morandi-sage font-light ml-1">CHILD SEAT</span>
                         </label>
-                        <select name="entry.1045781291" 
+                        <select name="entry.1887387302" 
                                 class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-morandi-gold focus:ring-1 focus:ring-morandi-gold outline-none transition text-sm bg-white">
                             <option value="否">否</option>
                             <option value="是">是</option>
@@ -523,15 +526,14 @@
 
                 </div>
 
-                <!-- Field 8: Warm Wishes / Notes -->
+                <!-- Field 9: Warm Wishes / Notes -->
                 <div>
                     <label class="block text-sm font-medium text-morandi-dark mb-1">
                         給新人的祝福與備註 <span class="font-english text-xs text-morandi-sage font-light ml-1">MESSAGE & NOTES</span>
                     </label>
                     <p class="text-xs text-morandi-sage mb-2">如需兒童椅及素食安排請告知。</p>
-                    <textarea name="entry.839337160_notes" 
+                    <textarea name="entry.1945371672" 
                               rows="3" 
-                              value="" 
                               placeholder="寫下您想對 Simon & Grace 說的話..." 
                               class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-morandi-gold focus:ring-1 focus:ring-morandi-gold outline-none transition text-sm"></textarea>
                 </div>
@@ -612,10 +614,8 @@
                 const content = header.nextElementSibling;
                 const icon = header.querySelector('.fa-chevron-down');
                 
-                // Toggle current accordion
                 const isOpen = content.classList.contains('active');
                 
-                // Close all other accordions
                 document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('active'));
                 document.querySelectorAll('.fa-chevron-down').forEach(i => i.style.transform = 'rotate(0deg)');
 
@@ -671,7 +671,6 @@
             window.submitted = false;
         }
 
-        // Bind modal functions to window for iframe access
         window.showThankYouModal = showThankYouModal;
         window.closeThankYouModal = closeThankYouModal;
     </script>
